@@ -1,0 +1,24 @@
+version: "3.9"
+
+services:
+  db:
+    image: postgres:15
+    container_name: ai_chat_db
+    restart: unless-stopped
+    env_file: .env.docker
+    ports:
+      - "5439:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   container_name: tajweed_pgadmin
+  #   restart: unless-stopped
+  #   env_file: .env.docker
+  #   ports:
+  #     # Change to another port if this port is already used.
+  #     - "8080:80"
+
+volumes:
+  postgres_data:

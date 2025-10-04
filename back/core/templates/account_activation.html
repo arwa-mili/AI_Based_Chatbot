@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Activation</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      }
+      
+      body {
+        background: linear-gradient(135deg, #ff7700, #ff9500);
+        color: #333;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+      }
+      
+      .container {
+        width: 100%;
+        max-width: 450px;
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+      }
+      
+      .header {
+        background: #ff7700;
+        padding: 25px 20px;
+        text-align: center;
+        color: white;
+      }
+      
+      .header h1 {
+        font-size: 24px;
+        margin-bottom: 5px;
+      }
+      
+      .content {
+        padding: 25px;
+      }
+      
+      .message {
+        margin-bottom: 20px;
+        text-align: center;
+        line-height: 1.6;
+      }
+      
+      .activation-code {
+        background: #fff5e6;
+        border-radius: 12px;
+        padding: 25px;
+        text-align: center;
+        margin: 25px 0;
+        border: 2px dashed #ff9900;
+      }
+      
+      .code {
+        font-size: 36px;
+        font-weight: bold;
+        letter-spacing: 8px;
+        color: #ff5500;
+        margin: 15px 0;
+        text-align: center;
+        padding: 5px;
+        font-family: 'Courier New', monospace;
+      }
+      
+      .countdown {
+        text-align: center;
+        margin: 25px 0;
+        font-size: 18px;
+        color: #ff5500;
+        font-weight: bold;
+        padding: 12px;
+        background: #fff5e6;
+        border-radius: 10px;
+      }
+      
+      .footer {
+        text-align: center;
+        padding: 20px;
+        font-size: 12px;
+        color: #777;
+        border-top: 1px solid #eee;
+      }
+      
+      .logo {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 15px;
+      }
+      
+      .logo-circle {
+        width: 50px;
+        height: 50px;
+        background: #ff7700;
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        font-size: 20px;
+        font-weight: bold;
+      }
+      
+      .support {
+        text-align: center;
+        margin-top: 25px;
+        font-size: 14px;
+        color: #666;
+      }
+      
+      .note {
+        background: #fffaf0;
+        border-left: 4px solid #ffaa00;
+        padding: 15px;
+        margin: 20px 0;
+        border-radius: 4px;
+      }
+      
+      @media (max-width: 480px) {
+        .container {
+          border-radius: 12px;
+        }
+      
+        .header {
+          padding: 20px 15px;
+        }
+      
+        .content {
+          padding: 20px 15px;
+        }
+      
+        .code {
+          font-size: 28px;
+          letter-spacing: 5px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1><i class="fas fa-mobile-alt"></i> Verify your account</h1>
+      </div>
+
+      <div class="content">
+        <div class="message">
+          <p>Hello {{ name | default:'' }},</p>
+          <p>Thank you for registering! Use the activation code below to verify your account.</p>
+        </div>
+
+        <div class="activation-code">
+          <p>
+            <i class="fas fa-key"></i> Your activation code
+          </p>
+          <div class="code">{{ code }}</div>
+          <p>Enter this code in the app</p>
+        </div>
+
+        <div class="countdown">
+          <i class="fas fa-clock"></i> Code expires in: {{ expiry_time }} minutes
+        </div>
+
+        <div class="note">
+          <p>
+            <i class="fas fa-exclamation-circle"></i> <strong>Note:</strong> This code is valid for {{ expiry_time }} minutes only. If you did not request this code, please ignore this message.
+          </p>
+        </div>
+
+        <div class="support">
+          <p>Need assistance? Contact our support team at support@example.com</p>
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="logo">
+          <div class="logo-circle">logo</div>
+        </div>
+        <p>&copy; {{ year }} Tajweed App Inc. All rights reserved.</p>
+      </div>
+    </div>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function () {
+        const expiryElement = document.querySelector('.countdown')
+        let timeLeft = 5 // minutes
+      
+        const updateCountdown = () => {
+          if (timeLeft >= 0) {
+            expiryElement.innerHTML = `<i class="fas fa-clock"></i> Code expires in: ${timeLeft} minutes`
+            timeLeft--
+          }
+        }
+      
+        updateCountdown()
+        const countdownInterval = setInterval(updateCountdown, 10000)
+      })
+    </script>
+  </body>
+</html>

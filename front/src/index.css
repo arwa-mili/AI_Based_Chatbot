@@ -1,0 +1,4 @@
+body { font-family: Inter, Arial, sans-serif; margin:0; }
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

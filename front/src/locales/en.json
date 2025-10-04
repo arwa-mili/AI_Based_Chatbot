@@ -1,0 +1,73 @@
+{
+  "nav": {
+    "home": "Home",
+    "chat": "Chat",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "signup": "Sign Up"
+  },
+  "landing": {
+    "heroTitle": "AI-Powered Chatbot",
+    "heroSubtitle": "Experience the future of conversation with multiple AI models",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "featuresTitle": "Features",
+    "feature1Title": "Multiple AI Models",
+    "feature1Desc": "Choose from three powerful AI models for your conversations",
+    "feature2Title": "Multilingual Support",
+    "feature2Desc": "Full support for English and Arabic with RTL layout",
+    "feature3Title": "Chat History",
+    "feature3Desc": "Save and revisit all your previous conversations",
+    "aboutTitle": "About",
+    "aboutDesc": "Our AI chatbot provides intelligent responses using state-of-the-art language models."
+  },
+  "auth": {
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "confirmPassword": "Confirm Password",
+    "loginTitle": "Login to Your Account",
+    "signupTitle": "Create New Account",
+    "noAccount": "Don't have an account?",
+    "haveAccount": "Already have an account?",
+    "loginButton": "Login",
+    "signupButton": "Sign Up",
+    "loginSuccess": "Login successful!",
+    "signupSuccess": "Account created successfully!",
+    "logoutSuccess": "Logged out successfully!"
+  },
+  "chat": {
+    "selectModel": "Select AI Model",
+    "typeMessage": "Type your message...",
+    "newChat": "New Chat",
+    "chatHistory": "Chat History",
+    "noChats": "No chat history yet",
+    "thinking": "Thinking...",
+    "send": "Send",
+    "delete": "Delete",
+    "export": "Export",
+    "model": {
+      "gpt4": "GPT-4 Model",
+      "claude": "Claude Model",
+      "deepseek": "DeepSeek Model"
+    }
+  },
+  "profile": {
+    "title": "User Profile",
+    "aiSummary": "AI-Generated Summary",
+    "language": "Language",
+    "noSummary": "No summary generated yet. Start chatting to generate your profile summary!",
+    "totalChats": "Total Chats",
+    "totalMessages": "Total Messages",
+    "memberSince": "Member Since"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "An error occurred. Please try again.",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "close": "Close"
+  }
+}

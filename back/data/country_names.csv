@@ -1,0 +1,35 @@
+iso3,language,name
+USA,en,United States
+USA,ar,الولايات المتحدة
+USA,fr,États-Unis
+USA,es,Estados Unidos
+SAU,en,Saudi Arabia
+SAU,ar,المملكة العربية السعودية
+SAU,fr,Arabie Saoudite
+SAU,es,Arabia Saudí
+FRA,en,France
+FRA,ar,فرنسا
+FRA,fr,France
+FRA,es,Francia
+ESP,en,Spain
+ESP,ar,إسبانيا
+ESP,fr,Espagne
+ESP,es,España
+DEU,en,Germany
+DEU,ar,ألمانيا
+DEU,fr,Allemagne
+DEU,es,Alemania
+TUN,en,Tunisia
+TUN,ar,تونس
+EGY,en,Egypt
+EGY,ar,مصر
+IDN,en,Indonesia
+IDN,ar,إندونيسيا
+PAK,en,Pakistan
+PAK,ar,باكستان
+IRN,en,Iran
+IRN,ar,إيران
+TUR,en,Turkey
+TUR,ar,تركيا
+
+

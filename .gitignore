@@ -1,0 +1,16 @@
+ai-chatbot-frontend
+
+##front
+
+.vscode
+# dependencies
+./front/mode_modules
+#env variables
+.env
+
+back/venv
+front/.env
+front/.DS_Store
+front/build
+front/dist
+venv/
