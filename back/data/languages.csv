@@ -1,16 +1,6 @@
-code,flag,isActive,direction
-en,🇺🇸,True,ltr
-ar,🇸🇦,True,rtl
-fr,🇫🇷,True,ltr
-es,🇪🇸,True,ltr
-de,🇩🇪,True,ltr
-zh,🇨🇳,True,ltr
-ja,🇯🇵,True,ltr
-ru,🇷🇺,True,ltr
-pt,🇵🇹,True,ltr
-it,🇮🇹,True,ltr
-tr,🇹🇷,True,ltr
-id,🇮🇩,True,ltr
-fa,🇮🇷,True,rtl
+language_code,language_name,language_native_name,language_direction
+en,English,English,ltr
+ar,Arabic,العربية,rtl
+
 
 

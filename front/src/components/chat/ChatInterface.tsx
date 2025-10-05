@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Menu } from 'lucide-react';
-import { Sidebar } from '../../components/layout/Sidebar';
+import { Sidebar } from '../layout/sidebar/Sidebar';
 import { ModelSelector } from './ModelSelector';
 import { MessageList } from './MessageList';
 import { ChatInput } from './ChatInput';

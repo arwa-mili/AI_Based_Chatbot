@@ -10,10 +10,10 @@ interface ChatContextType extends ChatState {
   exportChat: (chatId: number) => void;
   loadConversations: () => Promise<void>;
   loadMoreConversations: () => Promise<void>;
-  regenerateConversationTitle: (chatId: number) => Promise<void>; // ✅ added
+  regenerateConversationTitle: (chatId: number) => Promise<void>; 
   currentChat: Chat | null;
   hasMoreConversations: boolean;
-  loadingTitleId: number | null; // ✅ added
+  loadingTitleId: number | null; 
   stopTypingCallback?: () => void;
 }
 
@@ -51,10 +51,11 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         id: conv.id,
         userId: user.id,
         title: conv.title,
-        model: 'gpt4' as AIModel,
+        model: 'GPT' as AIModel,
         messages: [],
-        createdAt: new Date(conv.created_at),
-        updatedAt: new Date(conv.updated_at),
+        messages_count: conv.messages_count ?? 0,
+        created_at: new Date(conv.created_at),
+        updated_at: new Date(conv.updated_at),
       }));
 
       const newChat = state.chats.find(c => c.id === 0);
@@ -86,10 +87,11 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         id: conv.id,
         userId: user.id,
         title: conv.title,
-        model: 'gpt4' as AIModel,
+        model: 'GPT' as AIModel,
+        messages_count: conv.messages_count,
         messages: [],
-        createdAt: new Date(conv.created_at),
-        updatedAt: new Date(conv.updated_at),
+        created_at: new Date(conv.created_at),
+        updated_at: new Date(conv.updated_at),
       }));
 
       const newChat = state.chats.find(c => c.id === 0);
@@ -157,8 +159,8 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       title: 'New Chat',
       model,
       messages: [],
-      createdAt: new Date(),
-      updatedAt: new Date(),
+      created_at: new Date(),
+      updated_at: new Date(),
     };
 
     setState(prev => ({

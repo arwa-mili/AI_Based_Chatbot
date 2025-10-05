@@ -11,7 +11,7 @@ export const AISummary: React.FC<AISummaryProps> = ({ summary }) => {
 
   return (
     <div className="relative rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-purple-50 p-5 shadow-sm hover:shadow-md transition-all duration-300">
-      <div className="flex items-center mb-3 space-x-2">
+      <div className="flex items-center mb-3 gap-2">
         <Sparkles className="w-5 h-5 text-blue-500" />
         <span className="font-semibold text-gray-800">{t('profile.aiSummary')}</span>
       </div>

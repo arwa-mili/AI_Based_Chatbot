@@ -41,7 +41,7 @@ export const MessageList: React.FC = () => {
           ))}
           {isLoading && (
             <div className="flex justify-start">
-              <div className="bg-gray-100 p-4 rounded-lg flex items-center space-x-2">
+              <div className="bg-gray-100 p-4 rounded-lg flex items-center gap-2">
                 <LoadingSpinner size="sm" />
                 <span className="text-gray-600">{t('chat.thinking')}</span>
               </div>

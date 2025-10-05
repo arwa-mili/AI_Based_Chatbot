@@ -1,4 +1,5 @@
 from django.apps import AppConfig
+from .services.model import ModelManager
 
 
 class ChatConfig(AppConfig):
@@ -7,7 +8,6 @@ class ChatConfig(AppConfig):
     
     def ready(self):
         """Load models on app startup"""
-        from .services import ModelManager
         try:
             ModelManager()
         except Exception as e:

@@ -17,7 +17,6 @@ services:
   #   restart: unless-stopped
   #   env_file: .env.docker
   #   ports:
-  #     # Change to another port if this port is already used.
   #     - "8080:80"
 
 volumes:

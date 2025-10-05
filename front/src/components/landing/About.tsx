@@ -14,15 +14,14 @@ export const About: React.FC = () => {
           {t('landing.aboutDesc')}
         </p>
         <div className="bg-white p-8 rounded-xl shadow-lg">
-          <p className="text-gray-700 leading-relaxed mb-4">
-            Our platform integrates cutting-edge AI models to provide you with intelligent, context-aware responses. 
-            Whether you are seeking information, creative inspiration, or technical assistance, our chatbot adapts to your needs.
+
+        <p className="text-gray-700 leading-relaxed mb-4">
+            {t('landing.footerText1')}
           </p>
           <p className="text-gray-700 leading-relaxed">
-            Built with modern technologies including React, TypeScript, and Tailwind CSS, our application ensures 
-            a smooth, responsive experience across all devices. Your chat history is securely stored, and our AI 
-            generates personalized summaries to enhance future interactions.
+            {t('landing.footerText2')}
           </p>
+         
         </div>
       </div>
     </div>

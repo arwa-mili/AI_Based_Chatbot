@@ -22,16 +22,16 @@ export const Navigation: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 hover:opacity-80 transition">
+          <Link to="/" className="flex items-center gap-2 hover:opacity-80 transition">
             <Bot className="w-8 h-8" />
             <span className="font-bold text-xl">AI Chat</span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-4">
+          <div className="hidden md:flex items-center gap-4">
             <Link
               to="/"
-              className="flex items-center space-x-1 hover:bg-white/20 px-3 py-2 rounded-md transition"
+              className="flex items-center gap-1 hover:bg-white/20 px-3 py-2 rounded-md transition"
             >
               <Home className="w-4 h-4" />
               <span>{t('nav.home')}</span>
@@ -41,21 +41,21 @@ export const Navigation: React.FC = () => {
               <>
                 <Link
                   to="/chat"
-                  className="flex items-center space-x-1 hover:bg-white/20 px-3 py-2 rounded-md transition"
+                  className="flex items-center gap-1 hover:bg-white/20 px-3 py-2 rounded-md transition"
                 >
                   <MessageSquare className="w-4 h-4" />
                   <span>{t('nav.chat')}</span>
                 </Link>
                 <Link
                   to="/profile"
-                  className="flex items-center space-x-1 hover:bg-white/20 px-3 py-2 rounded-md transition"
+                  className="flex items-center gap-1 hover:bg-white/20 px-3 py-2 rounded-md transition"
                 >
                   <User className="w-4 h-4" />
                   <span>{t('nav.profile')}</span>
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center space-x-1 hover:bg-white/20 px-3 py-2 rounded-md transition"
+                  className="flex items-center gap-1 hover:bg-white/20 px-3 py-2 rounded-md transition"
                 >
                   <LogOut className="w-4 h-4" />
                   <span>{t('nav.logout')}</span>
@@ -73,7 +73,7 @@ export const Navigation: React.FC = () => {
 
             <button
               onClick={toggleLanguage}
-              className="flex items-center space-x-1 hover:bg-white/20 p-2 rounded-md transition"
+              className="flex items-center gap-1 hover:bg-white/20 p-2 rounded-md transition"
               title={language === 'en' ? 'العربية' : 'English'}
             >
               <Globe className="w-5 h-5" />

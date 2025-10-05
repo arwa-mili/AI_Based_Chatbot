@@ -16,8 +16,11 @@ logs:
 	docker compose logs -f
 
 # Django commands
-run:
+run: migrate seed_languages
 	source venv/bin/activate && $(DJANGO_MANAGE) runserver
+
+seed_languages:
+	source venv/bin/activate && $(DJANGO_MANAGE) seed_languages
 
 migrate:
 	source venv/bin/activate && $(DJANGO_MANAGE) migrate

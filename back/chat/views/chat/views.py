@@ -36,10 +36,10 @@ def get_ai_client(provider: str):
     # view at https://openrouter.ai/deepseek/deepseek-chat-v3.1:free/api
     #view at https://openrouter.ai/openai/gpt-oss-20b:free
 
-    elif provider == ModelUsedEnum.DEEPSEEK or provider == ModelUsedEnum.GPT:
+    elif (provider == ModelUsedEnum.DEEPSEEK or provider == ModelUsedEnum.GPT):
         return OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key="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",
+            api_key="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",
         )
     else:
         raise ValueError(f"Unknown AI provider: {provider}")
@@ -91,6 +91,7 @@ class ChatView(APIView):
             provider = request.data.get("provider", ModelUsedEnum.GEMINI)
             model_name = request.data.get("model")
             
+            
             language_obj = Language.objects.filter(language_code=language_to_be_used).first()
             if not language_obj:
                 language_obj = Language.objects.filter(language_code='en').first()
@@ -124,7 +125,6 @@ class ChatView(APIView):
             history_text = "\n".join([f"{sent_by}: {text}" for text, sent_by in chat_history if text])
             user_history_text = f"{history_text}\nUser: {question}" if history_text else f"User: {question}"
 
-            # System instruction for the AI
             system_instruction = """As an AI assistant, answer the user's question using your own knowledge.
 Include previous chat history for context but do not invent information.detect user language from the question and respond in the same language.Note that languages supported are English and Arabic only . But you must strictly respond in one single language ! Start directly from yur answer!"""
 
@@ -140,6 +140,7 @@ Include previous chat history for context but do not invent information.detect u
                 answer = response.text
 
             elif provider == ModelUsedEnum.DEEPSEEK:
+
                 completion = client.chat.completions.create(
                     model="deepseek/deepseek-chat-v3.1:free",
                     messages=[
@@ -150,6 +151,7 @@ Include previous chat history for context but do not invent information.detect u
                 answer = completion.choices[0].message.content
                 
             elif provider == ModelUsedEnum.GPT:
+                print("heere")
                 completion = client.chat.completions.create(
                     model="openai/gpt-oss-20b:free",
                     messages=[

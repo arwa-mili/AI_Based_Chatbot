@@ -12,13 +12,13 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModel, onS
   const { t } = useLanguage();
 
   const models: { value: AIModel; label: string }[] = [
-    { value: 'GEMINI', label: t('chat.model.gemini') },
+    { value: 'Gemini', label: t('chat.model.gemini') },
     { value: 'GPT', label: t('chat.model.gpt') },
     { value: 'DEEPSEEK', label: t('chat.model.deepseek') },
   ];
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center gap-2">
       <Bot className="w-5 h-5 text-gray-600" />
       <select
         value={selectedModel}

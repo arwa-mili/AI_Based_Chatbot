@@ -12,8 +12,8 @@ class Conversation(TimestampedModel):
         blank=True,
         related_name="conversations"
     )
-    title_ar = models.CharField(max_length=100,default= "aaaa")
-    title_en = models.CharField(max_length=100,default= "aaaa")
+    title_ar = models.CharField(max_length=100,default= "")
+    title_en = models.CharField(max_length=100,default= "")
 
 
     def __str__(self):

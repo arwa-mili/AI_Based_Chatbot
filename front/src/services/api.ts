@@ -17,7 +17,6 @@ class ApiService {
       },
     });
 
-    // Request interceptor
     this.api.interceptors.request.use(
       (config: InternalAxiosRequestConfig) => {
         const token = localStorage.getItem('accessToken');

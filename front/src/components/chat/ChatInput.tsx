@@ -32,7 +32,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ selectedModel, disabled })
     await sendMessage({
       conversation_id: currentChat.id,
       text: messageContent,
-      provider: "GPT",
+      provider: selectedModel,
       model: selectedModel,
     });
   };
@@ -46,7 +46,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ selectedModel, disabled })
 
   return (
     <div className="border-t border-gray-200 p-4 bg-gray-50">
-      <div className="flex items-end space-x-2">
+      <div className="flex items-end gap-2">
         <textarea
           ref={textareaRef}
           value={message}

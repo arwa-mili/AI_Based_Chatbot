@@ -46,7 +46,7 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ profile, summary }) =>
       <div className="max-w-4xl mx-auto px-4">
         <Card>
           {/* Header */}
-          <div className="flex items-center space-x-4 mb-8 pb-6 border-b border-gray-200">
+          <div className="flex items-center gap-4 mb-8 pb-6 border-b border-gray-200">
             <div className="w-20 h-20 bg-gradient-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center shadow-lg">
               <User className="w-10 h-10 text-white" />
             </div>

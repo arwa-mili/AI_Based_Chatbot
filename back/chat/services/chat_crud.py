@@ -1,7 +1,7 @@
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth import get_user_model
-from django.db.models import F 
+from django.db.models import F ,Count
 
 from core.models.conversation import Conversation
 from core.models.conversation_line import ConversationLine
@@ -48,7 +48,8 @@ class ConversationService:
 
         queryset = queryset.order_by('-updated_at')
 
-        conversations = queryset.annotate(title=F(title_field)).values('id', 'title')
+        conversations = queryset.annotate(title=F(title_field),messages_count=Count('lines', distinct=True)
+).values('id', 'title','messages_count')
 
         start = (pageNumber - 1) * pageSize
         end = start + pageSize

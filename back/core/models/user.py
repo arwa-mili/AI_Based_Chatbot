@@ -35,7 +35,7 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
-    conversations_quota = models.IntegerField(default=10)  
+    conversations_quota = models.IntegerField(default=5)  
     conversations_count = models.IntegerField(default=0)
     last_summary_generated = models.BooleanField(default=False, blank=False)
     last_analysis_summary_en = models.TextField(blank=True, default='')
@@ -51,3 +51,9 @@ class User(AbstractBaseUser, PermissionsMixin, TimestampedModel):
 
     def __str__(self):
         return self.email
+    
+    def increment_conversations_count(self):
+        self.conversations_count += 1
+        if self.conversations_count >= self.conversations_quota:
+            self.last_summary_generated = False
+        self.save()

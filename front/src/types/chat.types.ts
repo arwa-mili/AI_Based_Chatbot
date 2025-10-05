@@ -14,9 +14,10 @@ export interface Chat {
   userId: number;
   title: string;
   messages: Message[];
+  messages_count?: number;
   model: AIModel;
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }
 
 export interface CreateChatDto {
@@ -31,6 +32,7 @@ export interface GetConversationsDto {
 export interface ConversationItem {
   id: string;
   title: string;
+  messages_count: number;
 }
 
 export interface MessageItem {
@@ -56,8 +58,8 @@ export interface GetMessagesResponse {
   pageSize: number;
 }
 
-export type AIModel = 'DEEPSEEK' | 'GEMINI' | 'GPT';
-export type AIProvider = 'DeepSeek' | 'Gemini' | 'GPT';
+export type AIModel = 'DEEPSEEK' | 'Gemini' | 'GPT';
+export type AIProvider = 'DEEPSEEK' | 'Gemini' | 'GPT';
 export interface ChatState {
   chats: Chat[];
   currentChatId: number | null;

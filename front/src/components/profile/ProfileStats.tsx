@@ -10,7 +10,7 @@ export const ProfileStats: React.FC = () => {
   const totalMessages = chats.reduce((acc, chat) => acc + chat.messages.length, 0);
   const totalChats = chats.length;
   const lastChatDate = chats.length > 0 
-    ? new Date(Math.max(...chats.map(c => new Date(c.updatedAt).getTime())))
+    ? new Date(Math.max(...chats.map(c => new Date(c.updated_at).getTime())))
     : null;
 
   const stats = [
@@ -28,7 +28,7 @@ export const ProfileStats: React.FC = () => {
     },
     {
       icon: Calendar,
-      label: 'Last Activity',
+      label: t('profile.lastActivity'),
       value: lastChatDate ? lastChatDate.toLocaleDateString() : 'N/A',
       color: 'pink',
     },
@@ -50,7 +50,7 @@ export const ProfileStats: React.FC = () => {
 
           return (
             <div key={index} className={`${colors.bg} p-4 rounded-lg border border-${stat.color}-200`}>
-              <div className="flex items-center space-x-2 mb-2">
+              <div className="flex items-center gap-2 mb-2">
                 <Icon className={`w-5 h-5 ${colors.text}`} />
                 <p className="text-sm text-gray-600">{stat.label}</p>
               </div>

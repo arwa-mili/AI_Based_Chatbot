@@ -27,20 +27,20 @@ export const Features: React.FC = () => {
     },
     {
       icon: Zap,
-      title: 'Lightning Fast',
-      description: 'Get instant responses powered by advanced AI technology',
+      title:  t('landing.feature4Title'),
+      description: t('landing.feature4Desc'),
       color: 'yellow',
     },
     {
       icon: Shield,
-      title: 'Secure & Private',
-      description: 'Your conversations are encrypted and protected',
+      title:  t('landing.feature5Title'),
+      description:  t('landing.feature5Desc'),
       color: 'green',
     },
     {
       icon: Sparkles,
-      title: 'Smart Summaries',
-      description: 'AI-generated profile summaries for personalized experiences',
+      title: t('landing.feature6Title'),
+      description:  t('landing.feature6Desc'),
       color: 'indigo',
     },
   ];
@@ -61,7 +61,7 @@ export const Features: React.FC = () => {
           {t('landing.featuresTitle')}
         </h2>
         <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Discover powerful features designed to enhance your AI conversation experience
+          {t('landing.featuresDescription')}
         </p>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">

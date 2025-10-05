@@ -13,33 +13,52 @@ export const MessageItem: React.FC<MessageItemProps> = ({ message }) => {
 
   return (
     <div className={`flex ${isUser ? 'justify-end' : 'justify-start'}`}>
-      <div className={`flex items-start space-x-2 max-w-[75%] ${isRTL ? 'flex-row-reverse space-x-reverse' : ''}`}>
+      <div
+        className={`flex items-start max-w-[75%] ${
+          isRTL
+            ? 'flex-row-reverse gap-2 pl-2'
+            : 'flex-row gap-2 pr-2'
+        }`}
+      >
         {/* Avatar */}
-        <div className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
-          isUser ? 'bg-blue-600' : 'bg-gray-300'
-        }`}>
-          {isUser ? <User className="w-5 h-5 text-white" /> : <Bot className="w-5 h-5 text-gray-700" />}
+        <div
+          className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center ${
+            isUser ? 'bg-blue-600' : 'bg-gray-300'
+          }`}
+        >
+          {isUser ? (
+            <User className="w-5 h-5 text-white" />
+          ) : (
+            <Bot className="w-5 h-5 text-gray-700" />
+          )}
         </div>
 
-        {/* Message Bubble */}
+        {/* Message bubble */}
         <div className={`flex flex-col ${isUser ? 'items-end' : 'items-start'}`}>
           <div
             className={`px-4 py-3 rounded-lg break-words ${
-              isUser ? 'bg-blue-600 text-white rounded-br-none' : 'bg-gray-100 text-gray-900 rounded-bl-none'
+              isUser
+                ? 'bg-blue-600 text-white rounded-br-none'
+                : 'bg-gray-100 text-gray-900 rounded-bl-none'
             }`}
             style={{ direction: isRTL ? 'rtl' : 'ltr' }}
           >
-            {/* Render HTML safely */}
             <div dangerouslySetInnerHTML={{ __html: message.content }} />
           </div>
 
-          {/* Timestamp & model */}
-          <div className="flex items-center space-x-2 mt-1 px-1">
-            <span className="text-xs text-gray-500">
-              {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+          <div
+            className={`flex items-center mt-1 px-1 text-xs text-gray-500 ${
+              isRTL ? 'flex-row-reverse gap-reverse' : 'gap-2'
+            }`}
+          >
+            <span>
+              {new Date(message.timestamp).toLocaleTimeString([], {
+                hour: '2-digit',
+                minute: '2-digit',
+              })}
             </span>
             {message.model && !isUser && (
-              <span className="text-xs text-gray-400">• {message.model}</span>
+              <span className="text-gray-400">• {message.model}</span>
             )}
           </div>
         </div>

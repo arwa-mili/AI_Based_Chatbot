@@ -9,22 +9,22 @@ from .base import TimestampedModel
 
 class ConversationLine(TimestampedModel):
     text_ar = models.TextField(
-        validators=[MinLengthValidator(4)],
-        default= "aaaa"
+        validators=[MinLengthValidator(2)],
+        default= "  "
     )
     text_en = models.TextField(
-        validators=[MinLengthValidator(4)],
-        default= "aaaa"
+        validators=[MinLengthValidator(2)],
+        default= "  "
     )
     
     text_html_en = models.TextField(
-        validators=[MinLengthValidator(4)],
-        default= "aaaa"
+        validators=[MinLengthValidator(2)],
+        default= "  "
     )
     
     text_html_ar = models.TextField(
-        validators=[MinLengthValidator(4)],
-        default= "aaaa"
+        validators=[MinLengthValidator(2)],
+        default= "  "
     )
     
     conversation = models.ForeignKey(
