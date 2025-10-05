@@ -8,7 +8,7 @@ A full-stack web application built with React (Frontend) and Django (Backend).
 - [Tech Stack](#tech-stack)
 - - [Configuration](#configuration)
 - [Installation](#installation)
--
+- [API Documentation](#api-docs)
 
 ## ✨ Features
 
@@ -94,7 +94,7 @@ Frontend will be available at: `http://localhost:3000`
 
 
 
-```
+
 
 
 ## 📝 API Documentation
