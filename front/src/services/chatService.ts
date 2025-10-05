@@ -18,13 +18,13 @@ export const getConversations = async (dto:GetConversationsDto) : Promise<ApiCom
   );
 };
 
-export const getConversationMessages = async (conversationId: string,req: GetConversationsDto): Promise<ApiCommonResponse<GetMessagesResponse>> => {
-  return api.get<GetMessagesResponse>(`/chat/conversations/${conversationId}/messages/`,
+export const getConversationMessages = async (conversationId: number,req: GetConversationsDto): Promise<ApiCommonResponse<GetMessagesResponse>> => {
+  return api.get<GetMessagesResponse>(`/chat/conversations/${conversationId}/messages`,
     req
   );
 };
 
 export const sendMessage = async (request: SendMessageRequest) => {
-  const response = await api.post<{ content: string; model: string }>('/chat/message', request);
+  const response = await api.post<{ content: string; model: string ,conversation: {id: number}}>('/chat/message', request);
   return response.data;
 };

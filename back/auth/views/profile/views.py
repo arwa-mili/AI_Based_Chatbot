@@ -14,6 +14,7 @@ class UserProfileView(APIView):
     permission_classes = [IsAuthenticated]
     
     @extend_schema(
+        tags=["profile"],
         responses={
             200: UserProfileSerializer,
             400: {
@@ -49,6 +50,7 @@ class UserProfileView(APIView):
 
 
     @extend_schema(
+        tags=["profile"],
         request=UserProfileUpdateSerializer,
         responses=UserProfileSerializer,
         summary="Update current user profile",

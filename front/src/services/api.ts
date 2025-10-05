@@ -81,7 +81,6 @@ class ApiService {
           try {
             const response = await axios.post(`${API_BASE_URL}/auth/refresh/`, { refreshToken });
             const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-            console.log('Token refreshed:', accessToken, newRefreshToken);
 
             localStorage.setItem('accessToken', accessToken);
             localStorage.setItem('refreshToken', newRefreshToken);

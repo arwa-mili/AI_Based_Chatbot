@@ -11,6 +11,7 @@ class AnalysisHistoryView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
+        tags=["profile"],
         responses={
             200: ConversationAnalysisSerializer(many=True),
             401: {

@@ -1,4 +1,4 @@
-from django.utils import timezone
+from django.db.models import F 
 from rest_framework.views import APIView
 from rest_framework import status
 from langdetect import detect
@@ -9,6 +9,7 @@ from django.db import transaction
 from django.utils.html import escape, linebreaks
 
 from chat.services.chat_crud import ConversationService
+from chat.services.model import ConversationTitleService
 from core.models import Conversation, ConversationLine, Language
 from core.enums.enums import ModelUsedEnum, SentByEnum
 from chat.serializers.chat import ChatRequestSerializer, ConversationSerializer
@@ -68,7 +69,6 @@ class ChatView(APIView):
     def post(self, request):
         try:
             question = request.data.get("text")
-   
             if not question:
                 return api_response(
                     success=False,
@@ -103,9 +103,13 @@ class ChatView(APIView):
             else:
                 conversation = Conversation.objects.create(
                     user=user,
-                    language=language_obj,
                     **{title_field_name: title}
                 )
+                # Increment conversations_count atomically
+                from django.contrib.auth import get_user_model
+                User = get_user_model()
+                User.objects.filter(id=user.id).update(conversations_count=F('conversations_count') + 1)
+
 
             # Build conversation history
             chat_history = [
@@ -151,7 +155,6 @@ Include previous chat history for context but do not invent information.detect u
             bot_text = translate_text(plain_text, language_to_be_used, opposite_language)
 
 
-            # --- Save user message ---
             ConversationLine.objects.create(
                 conversation=conversation,
                 sent_by=SentByEnum.USER.value,
@@ -160,7 +163,7 @@ Include previous chat history for context but do not invent information.detect u
                 **{
                     text_field_name: question, 
                     text_opposite_language: user_text,
-                    text_html_field_name: linebreaks(question)  # HTML with line breaks only
+                    text_html_field_name: linebreaks(question) 
                 }
             )
 
@@ -173,9 +176,16 @@ Include previous chat history for context but do not invent information.detect u
                 **{
                     text_field_name: plain_text,
                     text_opposite_language: bot_text,
-                    text_html_field_name: linebreaks(answer.strip())  # HTML formatted, no escaping
+                    text_html_field_name: linebreaks(answer.strip()) 
                 }
             )
+            if (not conversation_id):
+                service = ConversationTitleService()  
+                conversation = service.regenerate_conversation_title(
+                conversation_id=conversation_id,
+                user=request.user
+            )  
+            
 
             serializer = ConversationSerializer(conversation)
             return api_response(

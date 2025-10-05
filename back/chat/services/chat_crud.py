@@ -1,20 +1,7 @@
-from datetime import time
-import json
-from typing import Any, Dict, Optional
-from django.conf import settings
-from django.contrib.auth import get_user_model, authenticate
-from django.db import transaction
+
 from django.contrib.auth import get_user_model
-from django.utils import timezone
-from django.db.models import F , Q
-from rest_framework_simplejwt.tokens import RefreshToken
-from core.models import User, Language
-
-from rest_framework.exceptions import AuthenticationFailed
-
-
-import jwt
-from jwt.algorithms import RSAAlgorithm
+from django.contrib.auth import get_user_model
+from django.db.models import F 
 
 from core.models.conversation import Conversation
 from core.models.conversation_line import ConversationLine
@@ -41,6 +28,12 @@ class ConversationService:
             **extra_fields
         )
         conv.save()
+
+        # Increment conversations_count atomically
+        from django.contrib.auth import get_user_model
+        User = get_user_model()
+        User.objects.filter(id=user_id).update(conversations_count=F('conversations_count') + 1)
+
         return conv
 
     @staticmethod

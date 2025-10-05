@@ -6,8 +6,8 @@ import { useAuth } from './AuthContext';
 interface ChatContextType extends ChatState {
   createNewChat: (model: AIModel) => Promise<void>;
   sendMessage: (request: SendMessageRequest) => Promise<void>;
-  selectChat: (chatId: string) => Promise<void>;
-  exportChat: (chatId: string) => void;
+  selectChat: (chatId: number) => Promise<void>;
+  exportChat: (chatId: number) => void;
   loadConversations: () => Promise<void>;
   loadMoreConversations: () => Promise<void>;
   currentChat: Chat | null;
@@ -28,7 +28,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreConversations, setHasMoreConversations] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [fakeChatLock, setFakeChatLock] = useState(false); // prevents creating multiple fake chats
+  const [fakeChatLock, setFakeChatLock] = useState(false); // prevents creating multiple new chats
   const pageSize = 15;
 
   useEffect(() => {
@@ -53,17 +53,21 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updatedAt: new Date(conv.updated_at),
       }));
 
-      // Preserve fake chat if exists
-      const fakeChat = state.chats.find(c => c.id.startsWith('fake-chat'));
+      // Preserve new chat placeholder if exists
+      const newChat = state.chats.find(c => c.id === 0);
       setState(prev => ({
         ...prev,
-        chats: fakeChat ? [fakeChat, ...chats] : chats,
+        chats: newChat ? [newChat, ...chats] : chats,
         isLoading: false,
       }));
 
       setHasMoreConversations(chats.length < (response.data.totalPages || 0));
     } catch (error) {
-      setState(prev => ({ ...prev, isLoading: false, error: error instanceof Error ? error.message : 'Failed to load conversations' }));
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Failed to load conversations',
+      }));
     }
   };
 
@@ -85,10 +89,10 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updatedAt: new Date(conv.updated_at),
       }));
 
-      const fakeChat = state.chats.find(c => c.id.startsWith('fake-chat'));
+      const newChat = state.chats.find(c => c.id === 0);
       setState(prev => ({
         ...prev,
-        chats: fakeChat ? [fakeChat, ...prev.chats.filter(c => c.id.startsWith('fake-chat')), ...newChats] : [...prev.chats, ...newChats],
+        chats: newChat ? [newChat, ...prev.chats.filter(c => c.id === 0), ...newChats] : [...prev.chats, ...newChats],
       }));
 
       setCurrentPage(nextPage);
@@ -99,11 +103,14 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       setIsLoadingMore(false);
     } catch (error) {
       setIsLoadingMore(false);
-      setState(prev => ({ ...prev, error: error instanceof Error ? error.message : 'Failed to load more conversations' }));
+      setState(prev => ({
+        ...prev,
+        error: error instanceof Error ? error.message : 'Failed to load more conversations',
+      }));
     }
   };
 
-  const loadChatMessages = async (chatId: string) => {
+  const loadChatMessages = async (chatId: number) => {
     try {
       setState(prev => ({ ...prev, isLoading: true }));
       const response = await chatService.getConversationMessages(chatId, { pageNumber: 1, pageSize });
@@ -120,28 +127,29 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
       setState(prev => ({
         ...prev,
-        chats: prev.chats.map(chat => chat.id === chatId ? { ...chat, messages } : chat),
+        chats: prev.chats.map(chat => (chat.id === chatId ? { ...chat, messages } : chat)),
         isLoading: false,
       }));
     } catch (error) {
-      setState(prev => ({ ...prev, isLoading: false, error: error instanceof Error ? error.message : 'Failed to load messages' }));
+      setState(prev => ({
+        ...prev,
+        isLoading: false,
+        error: error instanceof Error ? error.message : 'Failed to load messages',
+      }));
     }
   };
 
   const createNewChat = async (model: AIModel) => {
     if (!user) return;
 
-    // Block if fake chat is in progress
     if (fakeChatLock) {
-      const existingFakeChat = state.chats.find(chat => chat.id.startsWith('fake-chat'));
-      if (existingFakeChat) setState(prev => ({ ...prev, currentChatId: existingFakeChat.id }));
+      const existingNewChat = state.chats.find(chat => chat.id === 0);
+      if (existingNewChat) setState(prev => ({ ...prev, currentChatId: 0 }));
       return;
     }
 
-    // Create new fake chat
-    const fakeChatId = `fake-chat-${Date.now()}`;
-    const fakeChat: Chat = {
-      id: fakeChatId,
+    const newChat: Chat = {
+      id: 0,
       userId: user.id,
       title: 'New Chat',
       model,
@@ -152,17 +160,18 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     setState(prev => ({
       ...prev,
-      chats: [fakeChat, ...prev.chats],
-      currentChatId: fakeChatId,
+      chats: [newChat, ...prev.chats],
+      currentChatId: 0,
     }));
 
-    setFakeChatLock(true); // lock until first AI message is completed
+    setFakeChatLock(true);
   };
 
   const sendMessage = async (request: SendMessageRequest) => {
-    if (!state.currentChatId) return;
+    if (state.currentChatId == null) return;
 
-    const chatId = request.conversation_id || state.currentChatId;
+    let chatId = state.currentChatId;
+    const isNewChat = chatId === 0;
 
     // Local user message
     const userMessage: Message = {
@@ -204,11 +213,24 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     try {
       const response = await chatService.sendMessage({
         ...request,
-        conversation_id: (typeof(chatId) == 'string' && chatId.startsWith('fake-chat')) ? undefined : chatId,
+        conversation_id: isNewChat ? undefined : chatId,
       });
 
-      const fullText = response.content;
+      const realChatId: number = response.conversation.id;
 
+      // Replace placeholder ID with real ID
+      if (isNewChat && realChatId != null) {
+        setState(prev => ({
+          ...prev,
+          chats: prev.chats.map(chat => (chat.id === 0 ? { ...chat, id: realChatId } : chat)),
+          currentChatId: realChatId,
+          fakeChatLock: false,
+        }));
+        chatId = realChatId;
+      }
+
+      // Typing simulation
+      const fullText = response.content;
       let index = 0;
       const interval = 20;
       const typingInterval = setInterval(() => {
@@ -220,9 +242,7 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 ? {
                     ...chat,
                     messages: chat.messages.map(msg =>
-                      msg.id === aiMessageId
-                        ? { ...msg, content: fullText.slice(0, index), typing: true }
-                        : msg
+                      msg.id === aiMessageId ? { ...msg, content: fullText.slice(0, index), typing: true } : msg
                     ),
                   }
                 : chat
@@ -244,25 +264,26 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
                 : chat
             ),
           }));
-
-          if (typeof(chatId) == 'string' && chatId.startsWith('fake-chat')) setFakeChatLock(false);
         }
       }, interval);
 
       setState(prev => ({ ...prev, stopTypingCallback: () => clearInterval(typingInterval) }));
     } catch (error) {
-      if (typeof(chatId) == 'string' && chatId.startsWith('fake-chat')) setFakeChatLock(false);
-      setState(prev => ({ ...prev, error: error instanceof Error ? error.message : 'Failed to send message' }));
+      if (isNewChat) setFakeChatLock(false);
+      setState(prev => ({
+        ...prev,
+        error: error instanceof Error ? error.message : 'Failed to send message',
+      }));
     }
   };
 
-  const selectChat = async (chatId: string) => {
+  const selectChat = async (chatId: number) => {
     setState(prev => ({ ...prev, currentChatId: chatId }));
     const chat = state.chats.find(c => c.id === chatId);
     if (chat && chat.messages.length === 0) await loadChatMessages(chatId);
   };
 
-  const exportChat = (chatId: string) => {
+  const exportChat = (chatId: number) => {
     const chat = state.chats.find(c => c.id === chatId);
     if (!chat) return;
 

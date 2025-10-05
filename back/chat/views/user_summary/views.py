@@ -11,6 +11,8 @@ class UserSummaryView(APIView):
     permission_classes = [IsAuthenticated]
 
     @extend_schema(
+        description="Retrieve the latest summary of the user's analyses. If the user has reached their quota, a new summary will be generated.",
+        tags=["profile"],
         responses={
             200: {
                 "type": "object",

@@ -53,3 +53,9 @@ class ConversationAnalysisSerializer(serializers.ModelSerializer):
     @extend_schema_field(serializers.IntegerField())
     def get_conversation_count(self, obj) -> int:
         return obj.conversations.count()
+    
+class ConversationTitleGenRequestSerializer(serializers.Serializer):
+    """Serializer for generating or regenerating conversation title"""
+    conversation_id = serializers.IntegerField(
+        help_text="ID of the conversation to generate title for"
+    )

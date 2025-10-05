@@ -1,6 +1,6 @@
 export interface Message {
   id: string;
-  chatId: string | number;
+  chatId: number;
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
@@ -10,7 +10,7 @@ export interface Message {
 }
 
 export interface Chat {
-  id: string;
+  id: number;
   userId: string;
   title: string;
   messages: Message[];
@@ -60,13 +60,13 @@ export type AIModel = 'gpt4' | 'claude' | 'deepseek';
 export type AIProvider = 'DeepSeek' | 'Gemini' | 'OpenAi';
 export interface ChatState {
   chats: Chat[];
-  currentChatId: string | null;
+  currentChatId: number | null;
   isLoading: boolean;
   error: string | null;
 }
 
 export interface SendMessageRequest {
-  conversation_id?: number | string;
+  conversation_id?: number;
   text: string;
   model?: AIModel;
   provider: AIProvider
