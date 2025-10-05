@@ -5,6 +5,7 @@ A full-stack web application built with React (Frontend) and Django (Backend).
 ## 📋 Table of Contents
 
 - [Features](#features)
+- [Explanation of implementation (Answers to the doc questions/requirements)]("Explanation-of-implementation)
 - [Tech Stack](#tech-stack)
 - - [Configuration](#configuration)
 - [Installation](#installation)
@@ -18,6 +19,46 @@ A full-stack web application built with React (Frontend) and Django (Backend).
 - State management
 - AI integration
 - Responsive design with Tailwind CSS
+## Explanation Of Implementation
+
+# Models used: 
+   1/ Gemini (model gemini-2.5-flash) from AI Studio official website "https://aistudio.google.com/app/api-keys"
+   2/ DeepSeek ( model deepseek/deepseek-chat-v3.1:free) from openrouter  "https://openrouter.ai/" 
+   3/ Openai (model openai/gpt-oss-20b:free) from openrouter  "https://openrouter.ai/"
+   These are the three models used for chat.
+   Moroever I used other local models for summary generation (summaries of last chat) and tagging the conversations..
+
+  4/ loaded local models (
+
+ # i18n implementation :
+   i18n is used in both frontend and backend projects . 
+   In frontend it is inside the language context , linked to the files : 
+       src/locales/ar.json
+       src/locales/en.json
+  In the frontend code, whenever a label or text needs to be translated, it is written like this:
+
+<h1>{t("greeting")}</h1>
+<p>{t("profile.title")}</p>
+<button>{t("profile.edit")}</button>
+Here, t is a function provided by the i18n library (for example, react-i18next) that:
+
+Takes a key (like "greeting" or "profile.title").
+
+Looks up the key in the current language JSON file (based on the language set in the context).
+
+Returns the translated string corresponding to that key.
+
+Automatically updates the UI if the language changes dynamically.
+  
+
+5/ Then I used also API for translation from  'DEEPL' in free usage (500.000 free words translated per month) from https://api-free.deepl.com/v2/translate , judged accepted for a POC version of project.
+   This because I tried other translation libraries (explained and commented in the file code at back/core/utils/translate_text.py) but they show limited translation outputs even for simple terms.. 
+   So a suitable solution in prod would be a paid solution.
+
+
+
+
+
 
 ## 🛠 Tech Stack
 
