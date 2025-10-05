@@ -44,7 +44,7 @@ class ModelManager:
         # Flan-T5 for title generation & conversation summaries (supports both Arabic and English but used in english here)
         self.title_generator_en = pipeline(
             "text2text-generation",
-            model="google/flan-t5-base",  # Use flan-t5-large for better quality
+            model="google/flan-t5-base",  # Used flan-t5-large for better quality
             device=0 if torch.cuda.is_available() else -1
         )
         

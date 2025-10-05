@@ -11,7 +11,6 @@ CORS_ALLOW_ALL_ORIGINS = True
 
 SECRET_KEY = config('SECRET_KEY')
 
-ENCRYPTION_KEY=config('ENCRYPTION_KEY')
 
 
 ###### DB CONFIG ######
