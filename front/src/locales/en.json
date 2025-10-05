@@ -75,7 +75,8 @@
     "oldSummaries": "Old Summaries",
     "totalChats": "Total Chats",
     "totalMessages": "Total Messages",
-    "memberSince": "Member Since"
+    "memberSince": "Member Since",
+    "lastActivity": "Last Activity"
   },
   "common": {
     "loading": "Loading...",

@@ -18,12 +18,12 @@ A full-stack web application built with React (Frontend) and Django (Backend).
 
 ## ✨ Features
 
-- Modern React frontend with PrimeReact UI components & tailwind CSS
+- Modern React frontend with PrimeReact UI
 - Django REST Framework backend
 - Multi-language support (i18next)
-- State management with Zustand
+- State management
+- AI integration
 - Responsive design with Tailwind CSS
-- Docker support for easy deployment
 
 ## 🛠 Tech Stack
 
@@ -34,13 +34,10 @@ A full-stack web application built with React (Frontend) and Django (Backend).
 - **Tailwind CSS** 3.3.6 - Styling
 - **Axios** - HTTP client
 - **i18next** - Internationalization
-- **Zustand** - State management
-- **React Hot Toast** - Notifications
-- **jsPDF** - PDF generation
 
 ### Backend
 - **Django** - Python web framework
-- **PostgreSQL** - Database (Docker)
+- **PostgreSQL** - Database 
 - **Python 3** - Programming language
 
 ## 📦 Prerequisites

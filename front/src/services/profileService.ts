@@ -1,6 +1,6 @@
 import { CreateChatDto, GetConversationsDto, GetConversationsResponse, GetMessagesResponse, SendMessageRequest } from '../types/chat.types';
 import { ApiCommonResponse } from '../types/common.types';
-import { GetLastSummaryResponse, GetProfile, UpdateProfileDto } from '../types/profile.types';
+import { GetLastSummaryResponse, GetProfile, GetUserSummariesSummaryResponse, UpdateProfileDto } from '../types/profile.types';
 import api from './api';
 
 interface AIResponse {
@@ -9,7 +9,10 @@ interface AIResponse {
 }
 
 
-
+  
+export const getUserOldSummaries = async () : Promise<ApiCommonResponse<GetUserSummariesSummaryResponse>> =>{
+  return api.get<GetUserSummariesSummaryResponse>('/chat/summary-history'  );
+};
 
 export const getUserSummary = async () : Promise<ApiCommonResponse<GetLastSummaryResponse>> =>{
   return api.get<GetLastSummaryResponse>('/chat/user-summary'  );

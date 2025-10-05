@@ -3,14 +3,13 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useLanguage } from '../context/LanguageContext';
 import { ProfileView } from '../components/profile/ProfileView';
-import { GetProfile, GetLastSummaryResponse } from '../types/profile.types';
-import { getProfileInfo, getUserSummary } from '../services/profileService';
+import { GetProfile } from '../types/profile.types';
+import { getProfileInfo } from '../services/profileService';
 
 const ProfilePage: React.FC = () => {
   const { isAuthenticated, isLoading: authLoading } = useAuth();
   const { language } = useLanguage(); 
   const [profile, setProfile] = useState<GetProfile | null>(null);
-  const [summary, setSummary] = useState<GetLastSummaryResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,14 +17,8 @@ const ProfilePage: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-
-      const [profileRes, summaryRes] = await Promise.all([
-        getProfileInfo(),
-        getUserSummary(),
-      ]);
-
+      const profileRes = await getProfileInfo();
       setProfile(profileRes.data);
-      setSummary(summaryRes.data);
     } catch (err) {
       console.error(err);
       setError('Failed to load profile data');
@@ -36,7 +29,7 @@ const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     loadProfileData();
-  }, [language]); 
+  }, [language]);
 
   if (authLoading || loading) {
     return (
@@ -63,7 +56,7 @@ const ProfilePage: React.FC = () => {
 
   if (!profile) return null;
 
-  return <ProfileView profile={profile} summary={summary} />;
+  return <ProfileView profile={profile} />;
 };
 
 export default ProfilePage;

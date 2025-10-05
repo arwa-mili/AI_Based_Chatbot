@@ -1,44 +1,47 @@
 import React, { useEffect, useState } from 'react';
 import { User, History } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
-import { ProfileStats } from './ProfileStats';
 import { AISummary } from './AISummary';
+import { ProfileStats } from './ProfileStats';
 import { Card } from '../../components/common/Card';
 import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import { ProgressSpinner } from 'primereact/progressspinner';
-import { GetProfile, GetLastSummaryResponse } from '../../types/profile.types';
+import { GetProfile } from '../../types/profile.types';
+import { getUserOldSummaries } from '../../services/profileService';
 
 interface OldSummary {
   summary: string;
-  last_updated: string;
+  created_at: string;
 }
 
 interface ProfileViewProps {
   profile: GetProfile;
-  summary?: GetLastSummaryResponse | null;
 }
 
-export const ProfileView: React.FC<ProfileViewProps> = ({ profile, summary }) => {
+export const ProfileView: React.FC<ProfileViewProps> = ({ profile }) => {
   const { t, language, isRTL } = useLanguage();
   const [oldSummaries, setOldSummaries] = useState<OldSummary[]>([]);
+  const [loadingOldSummaries, setLoadingOldSummaries] = useState(false);
   const [showDialog, setShowDialog] = useState(false);
 
-  useEffect(() => {
-    if (summary) {
-      setOldSummaries([
-        summary,
-        {
-          summary: 'This user has shown remarkable improvement in project structuring.',
-          last_updated: '2024-09-10',
-        },
-        {
-          summary: 'Very consistent communication and problem-solving approach.',
-          last_updated: '2024-08-22',
-        },
-      ]);
+  const fetchOldSummaries = async () => {
+    try {
+      setLoadingOldSummaries(true);
+      const res = await getUserOldSummaries();
+      setOldSummaries(res.data.results);
+    } catch (err) {
+      console.error(err);
+      setOldSummaries([]);
+    } finally {
+      setLoadingOldSummaries(false);
     }
-  }, [summary]);
+  };
+
+  const handleShowDialog = () => {
+    fetchOldSummaries();
+    setShowDialog(true);
+  };
 
   return (
     <div className={`min-h-[calc(100vh-4rem)] bg-gray-50 py-8 ${isRTL ? 'rtl' : 'ltr'}`}>
@@ -57,20 +60,16 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ profile, summary }) =>
 
           {/* Profile Information */}
           <div className="space-y-6">
-            {/* Name */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">{t('auth.name')}</label>
               <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">{profile.name}</div>
             </div>
 
-            {/* Email */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">{t('auth.email')}</label>
               <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">{profile.email}</div>
             </div>
 
-
-            {/* Member Since */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">{t('profile.memberSince')}</label>
               <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
@@ -92,14 +91,14 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ profile, summary }) =>
                   icon={<History size={16} />}
                   label={t('profile.oldSummaries')}
                   className="p-button-text p-button-sm"
-                  onClick={() => setShowDialog(true)}
+                  onClick={handleShowDialog}
                 />
               </div>
-              <AISummary summary={summary?.summary} />
+              <AISummary />
             </div>
 
-            {/* Stats */}
-            <ProfileStats />
+            {/* Stats from profile */}
+            <ProfileStats totalMessages={profile.messages_count} totalChats={profile.conversations_count} lastActivity={profile.last_login} />
           </div>
         </Card>
       </div>
@@ -111,19 +110,25 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ profile, summary }) =>
         style={{ width: '40vw' }}
         onHide={() => setShowDialog(false)}
       >
-        <div className="space-y-4">
-          {oldSummaries.map((item, idx) => (
-            <div
-              key={idx}
-              className="p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm hover:bg-gray-100 transition-all"
-            >
-              <p className="text-gray-800 leading-relaxed mb-2">{item.summary}</p>
-              <p className="text-xs text-gray-500">
-                {new Date(item.last_updated).toLocaleDateString(language === 'en' ? 'en-US' : 'ar-SA')}
-              </p>
-            </div>
-          ))}
-        </div>
+        {loadingOldSummaries ? (
+          <div className="flex justify-center py-8">
+            <ProgressSpinner />
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {oldSummaries.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-4 bg-gray-50 rounded-lg border border-gray-200 shadow-sm hover:bg-gray-100 transition-all"
+              >
+                <p className="text-gray-800 leading-relaxed mb-2">{item.summary}</p>
+                <p className="text-xs text-gray-500">
+                  {new Date(item.created_at).toLocaleDateString(language === 'en' ? 'en-US' : 'ar-SA')}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
       </Dialog>
     </div>
   );

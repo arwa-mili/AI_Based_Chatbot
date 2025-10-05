@@ -75,7 +75,8 @@
     "noSummary": "لم يتم إنشاء ملخص بعد. ابدأ المحادثة لإنشاء ملخص ملفك الشخصي!",
     "totalChats": "إجمالي المحادثات",
     "totalMessages": "إجمالي الرسائل",
-    "memberSince": "عضو منذ"
+    "memberSince": "عضو منذ",
+    "lastActivity": "آخر دخول"
   },
   "common": {
     "loading": "جاري التحميل...",
