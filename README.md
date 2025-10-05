@@ -48,28 +48,9 @@ Before you begin, ensure you have the following installed:
 - **npm** or **yarn**
 - **Python 3** (v3.8 or higher)
 - **pip** - Python package manager
-- **Docker** and **Docker Compose** (optional, for containerized deployment)
 
-## 📁 Project Structure
 
-```
-.
-├── front/                  # React frontend
-│   ├── public/            # Static files
-│   ├── src/               # Source files
-│   ├── package.json       # Frontend dependencies
-│   └── tailwind.config.js # Tailwind configuration
-│
-├── back/                  # Django backend
-│   ├── manage.py          # Django management script
-│   ├── requirements.txt   # Python dependencies
-│   ├── Makefile          # Backend commands
-│   ├── .env.docker       # Docker environment variables
-│   └── venv/             # Python virtual environment
-│
-├── run.sh                # Setup and run script
-└── README.md             # This file
-```
+
 
 ## 🚀 Installation
 
