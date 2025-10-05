@@ -11,10 +11,8 @@ A full-stack web application built with React (Frontend) and Django (Backend).
 - [Installation](#installation)
 - [Usage](#usage)
 - [Configuration](#configuration)
-- [Docker Deployment](#docker-deployment)
 - [Development](#development)
-- [Contributing](#contributing)
-- [License](#license)
+
 
 ## ✨ Features
 
@@ -76,95 +74,10 @@ This will automatically:
 - Check for required dependencies
 - Set up the backend (create venv, install packages, run migrations)
 - Set up the frontend (install npm packages)
-- Start both services
 
-### Manual Installation
-
-#### Backend Setup
-
-```bash
-cd back
-
-# Create virtual environment
-python3 -m venv venv
-
-# Activate virtual environment
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Run migrations
-python manage.py migrate
-
-# Seed initial data
-python manage.py seed_languages
-
-# Create superuser (optional)
-python manage.py createsuperuser
-```
-
-#### Frontend Setup
-
-```bash
-cd front
-
-# Install dependencies
-npm install
-
-# Or with yarn
-yarn install
-```
-
-## 💻 Usage
-
-### Using the run.sh Script
-
-```bash
-# Setup only
-./run.sh setup
-
-# Run services (after setup)
-./run.sh run
-
-# Complete setup and run
-./run.sh all
-
-# Run with Docker
-./run.sh docker
-
-# Run backend only
-./run.sh backend
-
-# Run frontend only
-./run.sh frontend
-
-# Show help
-./run.sh help
-```
-
-### Manual Usage
-
-#### Start Backend
-```bash
-cd back
-source venv/bin/activate
-python manage.py runserver
-```
-
-Backend will be available at: `http://localhost:8000`
-
-#### Start Frontend
-```bash
-cd front
-npm start
-```
 
 Frontend will be available at: `http://localhost:3000`
 
-### Stopping Services
-
-Press `Ctrl+C` in the terminal where services are running. The run.sh script handles graceful shutdown automatically.
 
 ## ⚙️ Configuration
 
@@ -197,14 +110,6 @@ REACT_APP_API_URL=http://localhost:8000/api
 REACT_APP_ENV=development
 ```
 
-## 🐳 Docker Deployment
-
-### Using Docker Compose
-
-```bash
-cd back
-docker compose --env-file .env.docker up -d
-```
 
 ### View Docker Logs
 
@@ -222,90 +127,16 @@ docker compose down
 
 ## 🔧 Development
 
-### Backend Commands
 
-```bash
-# Run migrations
-make migrate
 
-# Create new migrations
-make makemigrations
 
-# Create superuser
-make createsuperuser
-
-# Install new packages
-make install
-
-# Update requirements.txt
-make freeze
-```
-
-### Frontend Commands
-
-```bash
-# Start development server
-npm start
-
-# Build for production
-npm run build
-
-# Run tests
-npm test
-
-# Eject configuration (irreversible)
-npm run eject
-```
-
-## 🧪 Testing
-
-### Backend Tests
-```bash
-cd back
-source venv/bin/activate
-python manage.py test
-```
-
-### Frontend Tests
-```bash
-cd front
-npm test
-```
 
 ## 📝 API Documentation
 
 Once the backend is running, API documentation is available at:
-- Swagger UI: `http://localhost:8000/api/docs/`
-- ReDoc: `http://localhost:8000/api/redoc/`
+- Swagger UI: `http://localhost:8000/api/schema/docs/`
 
-(Note: Update these URLs based on your actual API documentation setup)
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👥 Authors
-
-- Your Name - Initial work
-
-## 🙏 Acknowledgments
-
-- React team for the amazing framework
-- Django team for the robust backend framework
-- PrimeReact for the beautiful UI components
-- All contributors who helped with this project
-
-## 📞 Support
-
-For support, email your-email@example.com or open an issue in the repository.
 
 ---
 
