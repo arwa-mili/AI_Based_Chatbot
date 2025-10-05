@@ -10,6 +10,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "id",
             "email",
             "name",
+            "created_at",
             "language",
             "language_code"
         ]
@@ -21,5 +22,5 @@ class UserProfileUpdateSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             "name",
-            "language_code"
+            "email"
         ]

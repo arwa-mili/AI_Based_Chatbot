@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect, ReactNode } from
 import { Chat, Message, ChatState, AIModel, SendMessageRequest } from '../types/chat.types';
 import * as chatService from '../services/chatService';
 import { useAuth } from './AuthContext';
+import { useLanguage } from './LanguageContext';
 
 interface ChatContextType extends ChatState {
   createNewChat: (model: AIModel) => Promise<void>;
@@ -29,15 +30,17 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
   });
 
   const [currentPage, setCurrentPage] = useState(1);
+  const { language } = useLanguage();
+
   const [hasMoreConversations, setHasMoreConversations] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [fakeChatLock, setFakeChatLock] = useState(false);
-  const [loadingTitleId, setLoadingTitleId] = useState<number | null>(null); // ✅ added
+  const [loadingTitleId, setLoadingTitleId] = useState<number | null>(null); 
   const pageSize = 15;
 
   useEffect(() => {
     if (user) loadConversations();
-  }, [user]);
+  }, [user,language]);
 
   const loadConversations = async () => {
     if (!user) return;

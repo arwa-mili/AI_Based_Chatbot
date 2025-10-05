@@ -25,7 +25,6 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ profile, summary }) =>
   const [showDialog, setShowDialog] = useState(false);
 
   useEffect(() => {
-    // Example: populate old summaries for demo; replace with backend call if needed
     if (summary) {
       setOldSummaries([
         summary,
@@ -70,19 +69,12 @@ export const ProfileView: React.FC<ProfileViewProps> = ({ profile, summary }) =>
               <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">{profile.email}</div>
             </div>
 
-            {/* Language */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">{t('profile.language')}</label>
-              <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-                {language === 'en' ? 'English' : 'العربية'}
-              </div>
-            </div>
 
             {/* Member Since */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">{t('profile.memberSince')}</label>
               <div className="px-4 py-3 bg-gray-50 rounded-lg border border-gray-200">
-                {new Date(profile.createdAt).toLocaleDateString(language === 'en' ? 'en-US' : 'ar-SA', {
+                {new Date(profile.created_at).toLocaleDateString(language === 'en' ? 'en-US' : 'ar-SA', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric',

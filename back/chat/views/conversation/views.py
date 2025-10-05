@@ -1,4 +1,6 @@
 from jsonschema import ValidationError
+from core.utils.error_translator import t
+
 from rest_framework.views import APIView
 from rest_framework import status
 from django.db import transaction
@@ -39,34 +41,35 @@ class ConversationView(APIView):
     @transaction.atomic
     def get(self, request):
         try:
-            
             user = request.user if request.user.is_authenticated else None
             language_code = request.GET.get("language_code", "en")
 
-            convs = ConversationService.get_conversations(1,20, user or 1,language_code)
-                
 
+            convs = ConversationService.get_conversations(1, 20, user or 1, language_code)
+            
             return api_response(
                 success=True,
-                info="CONVERSATION_GENERATED_SUCCESSFULLY",
+                info=t("CONVERSATIONS_RETURNED_SUCCESSFULLY", language_code),
                 data=convs,
                 status_code=status.HTTP_200_OK
             )
+
         except ValidationError as e:
-            exception_log(e,__file__)
+            exception_log(e, __file__)
             transaction.set_rollback(True)
             return api_response(
                 success=False,
-                info="VALIDATION_ERROR",
-                error=str(e.detail),
+                info=t("VALIDATION_ERROR", language_code),
+                error=str(e),
                 status_code=status.HTTP_400_BAD_REQUEST
             )
+
         except Exception as e:
             transaction.set_rollback(True)
             exception_log(e, __file__)
             return api_response(
                 success=False,
-                info="PROBLEM",
+                info=t("PROBLEM", language_code),
                 error=str(e),
                 status_code=status.HTTP_400_BAD_REQUEST
             )

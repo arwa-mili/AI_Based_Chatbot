@@ -84,30 +84,16 @@ class UserService:
             }
         }
         
-    @staticmethod
-    def activate_user(user):
-        user.is_active =  True
-        user.save(update_fields=['is_active'])
 
     @staticmethod
     @transaction.atomic
-    def update_user_profile(user, request_data: dict, validated_data: dict):
-        has_changes = False
-        language_code = request_data.get('language_code')
-        
-       
-        if language_code != user.language_code:
-            has_changes = True
-            language = None
-           
-            user.language = language
- 
+    def update_user_profile(user: any, validated_data: dict, request_data: dict):
+        """
+        Update user profile with validated data.
+        """
         for field, value in validated_data.items():
             if hasattr(user, field) and getattr(user, field) != value:
                 setattr(user, field, value)
-                has_changes = True
-        
-        if has_changes:
-            user.save()
+
+        user.save()
         return user
-   
