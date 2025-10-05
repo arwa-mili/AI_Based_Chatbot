@@ -6,6 +6,7 @@ django-cors-headers==4.7.0
 django-storages==1.14.6
 drf-spectacular==0.28.0
 asgiref==3.9.1
+langdetect==1.0.9
 sqlparse==0.5.3
 pytz==2025.2
 tzdata==2025.2
@@ -43,6 +44,8 @@ torch==2.5.1
 accelerate==0.24.1
 sentencepiece==0.1.96
 protobuf==3.20.3   
+google-genai==0.5.0  
+
 
 # Utils
 attrs==25.3.0
