@@ -83,49 +83,30 @@ Frontend will be available at: `http://localhost:3000`
 
 ### Backend Configuration
 
-Create a `.env.docker` file in the `back/` directory with the following variables:
+Create a `.env` file in the `back/config/settings` directory with the following variables:
 
 ```env
 # Database
-POSTGRES_DB=your_database_name
-POSTGRES_USER=your_database_user
-POSTGRES_PASSWORD=your_database_password
-POSTGRES_HOST=db
-POSTGRES_PORT=5432
+SECRET_KEY=super-secret-key
+
+DB_NAME=XXXXXXX
+DB_USER=XXXXXXX 
+DB_PASSWORD=XXXXXX
+DB_HOST=XXXXXX
+DB_PORT=XXXXXX
 
 # Django
-SECRET_KEY=your_secret_key_here
-DEBUG=True
-ALLOWED_HOSTS=localhost,127.0.0.1
+SECRET_KEY=super-secret-key
 
-# Other configurations
-```
+#For those you can use my keys to be able to test models 
+EDEEPL_API_KEY='your_api_key' or 152a76e2-77c6-4d39-8080-7de0ef0376a8:fx'
+GEMINI_API_KEY='your_api_key' or 'AIzaSyAU6oQbS23u_hXPLAqZIwzOpFlDvRikBEs'
+OPENROUTER_API_KEY='your_api_key' or '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'
 
-### Frontend Configuration
 
-Environment variables can be added to a `.env` file in the `front/` directory:
-
-```env
-REACT_APP_API_URL=http://localhost:8000/api
-REACT_APP_ENV=development
 ```
 
 
-### View Docker Logs
-
-```bash
-cd back
-docker compose logs -f
-```
-
-### Stop Docker Containers
-
-```bash
-cd back
-docker compose down
-```
-
-## 🔧 Development
 
 
 
@@ -137,7 +118,3 @@ Once the backend is running, API documentation is available at:
 - Swagger UI: `http://localhost:8000/api/schema/docs/`
 
 
-
----
-
-**Note**: Make sure to update the `.env.docker` file with your actual configuration before running the application.
