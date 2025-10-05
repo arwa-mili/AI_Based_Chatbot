@@ -31,20 +31,29 @@ class UserSummaryService:
                 }
 
             # Trigger summarization
-            analysis = self.analyzer.analyze_conversations(
+            analysis_ar =  self.analyzer.analyze_conversations(
                 conversation_ids=[conv.id for conv in last_conversations],
                 user=user,
-                output_lang=lang_code
+                output_lang='ar'
+            )
+            
+            
+            analysis_en = self.analyzer.analyze_conversations(
+                conversation_ids=[conv.id for conv in last_conversations],
+                user=user,
+                output_lang='en'
             )
 
             # Reset user fields after summarization
             user.last_summary_generated = True
             user.conversations_count = 0
+            user.last_analysis_summary_ar= analysis_ar.summary_ar,
+            user.last_analysis_summary_en = analysis_en.summary_en,
             user.last_analysis_date = timezone.now()
             user.save(update_fields=['last_summary_generated', 'conversations_count', 'last_analysis_date'])
 
             # Return generated summary
-            summary = analysis.summary_en if lang_code == 'en' else analysis.summary_ar
+            summary = analysis_en.summary_en if lang_code == 'en' else analysis_ar.summary_ar
             return {
                 "success": True,
                 "summary": summary,
@@ -53,7 +62,6 @@ class UserSummaryService:
                 "triggered": True
             }
 
-        # Case 2: Just return the last saved summary
         else:
             summary = user.last_analysis_summary_en if lang_code == 'en' else user.last_analysis_summary_ar
             return {

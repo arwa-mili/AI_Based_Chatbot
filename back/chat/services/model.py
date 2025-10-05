@@ -156,6 +156,7 @@ class ChatAnalyzerService:
                     bot_messages.append(re.sub(r'^(Bot:|بوت:)', '', line).strip())
 
         summary = self._generate_summary(user_messages, lang_code)
+        
 
         return {
             "summary": summary,

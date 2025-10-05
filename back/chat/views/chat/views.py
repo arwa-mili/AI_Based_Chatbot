@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiTypes
 from django.db import transaction
 from django.utils.html import escape, linebreaks
-
+from core.models.user import User as UserModel
 from chat.services.chat_crud import ConversationService
 from chat.services.model import ConversationTitleService
 from core.models import Conversation, ConversationLine, Language
@@ -17,11 +17,13 @@ from core.utils.response_wrapper import api_response
 import os
 
 from google import genai
-import openai
 from openai import OpenAI
 
 from core.utils.translate_text import translate_text
+from decouple import config
 
+GEMINI_API_KEY = config("GEMINI_API_KEY")
+OPENROUTER_API_KEY = config("OPENROUTER_API_KEY")
 
 # ---------------------------
 # AI Client Factory
@@ -31,7 +33,7 @@ def get_ai_client(provider: str):
     Return the client for the requested AI provider.
     """
     if provider == ModelUsedEnum.GEMINI:
-        api_key = 'AIzaSyAU6oQbS23u_hXPLAqZIwzOpFlDvRikBEs'
+        api_key = GEMINI_API_KEY
         return genai.Client(api_key=api_key)
     # view at https://openrouter.ai/deepseek/deepseek-chat-v3.1:free/api
     #view at https://openrouter.ai/openai/gpt-oss-20b:free
@@ -39,7 +41,7 @@ def get_ai_client(provider: str):
     elif (provider == ModelUsedEnum.DEEPSEEK or provider == ModelUsedEnum.GPT):
         return OpenAI(
             base_url="https://openrouter.ai/api/v1",
-            api_key="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",
+            api_key=OPENROUTER_API_KEY
         )
     else:
         raise ValueError(f"Unknown AI provider: {provider}")
@@ -126,7 +128,7 @@ class ChatView(APIView):
             user_history_text = f"{history_text}\nUser: {question}" if history_text else f"User: {question}"
 
             system_instruction = """As an AI assistant, answer the user's question using your own knowledge.
-Include previous chat history for context but do not invent information.detect user language from the question and respond in the same language.Note that languages supported are English and Arabic only . But you must strictly respond in one single language ! Start directly from yur answer!"""
+Include previous chat history for context but do not invent information.detect user language from the LAST {question} and respond in the same language.Note that languages supported are English and Arabic only . But you must strictly respond in one single language ! Start directly from yur answer, please do not mention the history before replying !!"""
 
             client = get_ai_client(provider)
 
@@ -151,7 +153,6 @@ Include previous chat history for context but do not invent information.detect u
                 answer = completion.choices[0].message.content
                 
             elif provider == ModelUsedEnum.GPT:
-                print("heere")
                 completion = client.chat.completions.create(
                     model="openai/gpt-oss-20b:free",
                     messages=[
@@ -202,6 +203,8 @@ Include previous chat history for context but do not invent information.detect u
                 conversation_id=conversation.id,
                 user=request.user
             )  
+                
+            request.user.increment_conversations_count()
             
 
             serializer = ConversationSerializer(conversation)

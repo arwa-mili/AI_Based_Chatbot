@@ -1,3 +1,5 @@
+from core.models.conversation import Conversation
+from core.models.conversation_line import ConversationLine
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -23,7 +25,7 @@ class UserProfileView(APIView):
                     "success": {"type": "boolean"},
                     "info": {"type": "string"},
                     "error": {"type": "string"},
-                },
+                }
             },
         },
         summary="Get current user profile",
@@ -31,12 +33,25 @@ class UserProfileView(APIView):
     )
     def get(self, request):
         try:
-            serializer = UserProfileSerializer(request.user)
+            user = request.user
+            serializer = UserProfileSerializer(user)
 
+            conversations_count = Conversation.objects.filter(user=user).count()
+
+            messages_count = ConversationLine.objects.filter(conversation__user=user).count()
+
+            last_login = user.last_login
+
+            data = serializer.data
+            data.update({
+                "conversations_count": conversations_count,
+                "messages_count": messages_count,
+                "last_login": last_login,
+            })
             return api_response(
                 success=True,
                 info="USER_FETCHED",
-                data=serializer.data,
+                data=data,
                 status_code=status.HTTP_200_OK
             )
         except Exception as e:

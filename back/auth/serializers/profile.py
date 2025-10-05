@@ -2,7 +2,6 @@ from rest_framework import serializers
 from core.models import User
 
 class UserProfileSerializer(serializers.ModelSerializer):
-    language = serializers.CharField(source="langauge.language_name", read_only=True, allow_null=True)
 
     class Meta:
         model = User
@@ -11,8 +10,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
             "email",
             "name",
             "created_at",
-            "language",
-            "language_code"
+            "last_login"
         ]
         read_only_fields = fields
 

@@ -1,10 +1,10 @@
 
 
 #translator for the app generated content my models
-import os
+from decouple import config
 import requests
 
-DEEPL_API_KEY = "152a76e2-77c6-4d39-8080-7de0ef0376a8:fx"
+DEEPL_API_KEY = config('DEEPL_API_KEY')
 DEEPL_URL = "https://api-free.deepl.com/v2/translate" 
 #this api is limited to 500,000 characters per month for free plan
 def translate_text(text: str, source_lang: str,target_lang: str) -> str:

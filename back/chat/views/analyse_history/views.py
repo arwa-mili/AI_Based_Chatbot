@@ -34,6 +34,7 @@ class AnalysisHistoryView(APIView):
         )
         return Response({
             'success': True,
-            'count': analyses.count(),
+            "data": {'count': analyses.count(),
             'results': serializer.data
+            }
         }, status=status.HTTP_200_OK)
