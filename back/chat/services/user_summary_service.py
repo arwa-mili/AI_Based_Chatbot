@@ -58,10 +58,11 @@ class UserSummaryService:
             summary = user.last_analysis_summary_en if lang_code == 'en' else user.last_analysis_summary_ar
             return {
                 "success": True,
-                "summary": summary,
+                "data":{"summary": summary,
                 "last_updated": user.last_analysis_date,
                 "language": lang_code,
                 "triggered": False
+                }
             }
 
     def _get_recent_conversations(self, user: User):

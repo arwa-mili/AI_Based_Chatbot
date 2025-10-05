@@ -12,9 +12,9 @@ export const ModelSelector: React.FC<ModelSelectorProps> = ({ selectedModel, onS
   const { t } = useLanguage();
 
   const models: { value: AIModel; label: string }[] = [
-    { value: 'gpt4', label: t('chat.model.gpt4') },
-    { value: 'claude', label: t('chat.model.claude') },
-    { value: 'deepseek', label: t('chat.model.deepseek') },
+    { value: 'GEMINI', label: t('chat.model.gemini') },
+    { value: 'GPT', label: t('chat.model.gpt') },
+    { value: 'DEEPSEEK', label: t('chat.model.deepseek') },
   ];
 
   return (

@@ -7,7 +7,7 @@ import { Navigation } from './components/layout/Navigation';
 import { LandingPage } from './pages/LandingPage';
 import { AuthPage } from './pages/AuthPage';
 import { ChatPage } from './pages/ChatPage';
-import { ProfilePage } from './pages/ProfilePage';
+import  ProfilePage  from './pages/ProfilePage';
 
 function App() {
   return (

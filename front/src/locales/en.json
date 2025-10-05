@@ -48,9 +48,9 @@
     "delete": "Delete",
     "export": "Export",
     "model": {
-      "gpt4": "GPT-4 Model",
-      "claude": "Claude Model",
-      "deepseek": "DeepSeek Model"
+      "gemini": "Gemini-2.5-flash Model",
+      "gpt": "OPENAI gpt-oss-20b Model",
+      "deepseek": "Deepseek-chat-v3.1 Model"
     }
   },
   "profile": {

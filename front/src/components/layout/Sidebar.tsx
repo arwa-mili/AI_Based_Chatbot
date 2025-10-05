@@ -1,5 +1,5 @@
 import React, { useRef, useCallback } from 'react';
-import { Plus, Download, Trash2, MessageSquare, Loader2 } from 'lucide-react';
+import { Plus, Download, Trash2, MessageSquare, Loader2, RefreshCcw } from 'lucide-react';
 import { useChat } from '../../context/ChatContext';
 import { useLanguage } from '../../context/LanguageContext';
 import { Button } from '../../components/common/Button';
@@ -19,10 +19,12 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
     exportChat, 
     isLoading,
     loadMoreConversations,
-    hasMoreConversations 
+    hasMoreConversations,
+    regenerateConversationTitle,   // ✅ added
+    loadingTitleId                 // ✅ added
   } = useChat();
+
   const { t, isRTL } = useLanguage();
-  
   const observerTarget = useRef<HTMLDivElement>(null);
 
   // Infinite scroll observer
@@ -53,11 +55,8 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
   }, [handleObserver]);
 
   const handleNewChat = async () => {
-    if (currentChat && currentChat.messages.length === 0) {
-      return;
-    }
-    
-    await createNewChat('gpt4' as AIModel);
+    if (currentChat && currentChat.messages.length === 0) return;
+    await createNewChat('GPT' as AIModel);
   };
 
   const isNewChatDisabled = currentChat !== null && currentChat.messages.length === 0;
@@ -120,6 +119,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose }) => {
                   >
                     <div className="flex justify-between items-start mb-1">
                       <span className="text-sm font-medium truncate flex-1">{chat.title}</span>
+                      {/* ✅ Regenerate button added */}
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          regenerateConversationTitle(chat.id);
+                        }}
+                        className="p-1 hover:bg-gray-300 rounded"
+                        title={t('chat.regenerateTitle') || 'Regenerate title'}
+                        disabled={loadingTitleId === chat.id}
+                      >
+                        {loadingTitleId === chat.id ? (
+                          <Loader2 className="w-3 h-3 animate-spin text-blue-500" />
+                        ) : (
+                          <RefreshCcw className="w-3 h-3 text-gray-600" />
+                        )}
+                      </button>
                     </div>
                     <div className="flex items-center justify-between text-xs text-gray-500">
                       <span>{chat.messages?.length || 0} messages</span>

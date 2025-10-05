@@ -130,6 +130,11 @@ class ApiService {
     return response.data;
   }
 
+  public async patch<T>(url: string, data?: any): Promise<ApiCommonResponse<T>> {
+    const response = await this.api.patch<ApiCommonResponse<T>>(url, data);
+    return response.data;
+  }
+
   public async post<T>(url: string, data?: any): Promise<ApiCommonResponse<T>> {
     const response = await this.api.post<ApiCommonResponse<T>>(url, data);
     return response.data;

@@ -10,18 +10,16 @@ export const AISummary: React.FC<AISummaryProps> = ({ summary }) => {
   const { t } = useLanguage();
 
   return (
-    <div>
-      <label className="block text-sm font-medium text-gray-700 mb-2 flex items-center space-x-2">
-        <Sparkles className="w-4 h-4" />
-        <span>{t('profile.aiSummary')}</span>
-      </label>
-      <div className="px-4 py-4 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg border border-blue-200">
-        {summary ? (
-          <p className="text-gray-700 leading-relaxed">{summary}</p>
-        ) : (
-          <p className="text-gray-500 italic">{t('profile.noSummary')}</p>
-        )}
+    <div className="relative rounded-xl border border-blue-200 bg-gradient-to-br from-blue-50 to-purple-50 p-5 shadow-sm hover:shadow-md transition-all duration-300">
+      <div className="flex items-center mb-3 space-x-2">
+        <Sparkles className="w-5 h-5 text-blue-500" />
+        <span className="font-semibold text-gray-800">{t('profile.aiSummary')}</span>
       </div>
+      {summary ? (
+        <p className="text-gray-700 leading-relaxed">{summary}</p>
+      ) : (
+        <p className="text-gray-500 italic">{t('profile.noSummary')}</p>
+      )}
     </div>
   );
 };

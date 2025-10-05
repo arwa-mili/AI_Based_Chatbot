@@ -10,8 +10,10 @@ interface ChatContextType extends ChatState {
   exportChat: (chatId: number) => void;
   loadConversations: () => Promise<void>;
   loadMoreConversations: () => Promise<void>;
+  regenerateConversationTitle: (chatId: number) => Promise<void>; // ✅ added
   currentChat: Chat | null;
   hasMoreConversations: boolean;
+  loadingTitleId: number | null; // ✅ added
   stopTypingCallback?: () => void;
 }
 
@@ -25,10 +27,12 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     isLoading: false,
     error: null,
   });
+
   const [currentPage, setCurrentPage] = useState(1);
   const [hasMoreConversations, setHasMoreConversations] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [fakeChatLock, setFakeChatLock] = useState(false); // prevents creating multiple new chats
+  const [fakeChatLock, setFakeChatLock] = useState(false);
+  const [loadingTitleId, setLoadingTitleId] = useState<number | null>(null); // ✅ added
   const pageSize = 15;
 
   useEffect(() => {
@@ -53,7 +57,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         updatedAt: new Date(conv.updated_at),
       }));
 
-      // Preserve new chat placeholder if exists
       const newChat = state.chats.find(c => c.id === 0);
       setState(prev => ({
         ...prev,
@@ -173,7 +176,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     let chatId = state.currentChatId;
     const isNewChat = chatId === 0;
 
-    // Local user message
     const userMessage: Message = {
       id: Date.now().toString(),
       chatId,
@@ -190,7 +192,6 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
       ),
     }));
 
-    // AI placeholder
     const aiMessageId = `ai-${Date.now()}`;
     const aiMessage: Message = {
       id: aiMessageId,
@@ -216,9 +217,14 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         conversation_id: isNewChat ? undefined : chatId,
       });
 
-      const realChatId: number = response.conversation.id;
+      const conversation = response.conversation || response?.conversation;
+      const realChatId: number = conversation?.id ?? chatId;
+      const fullText = response.content || response?.content || '';
 
-      // Replace placeholder ID with real ID
+      const title_en = conversation?.title_en;
+      const title_ar = conversation?.title_ar;
+      const currentLang = localStorage.getItem('language') || 'en';
+
       if (isNewChat && realChatId != null) {
         setState(prev => ({
           ...prev,
@@ -229,8 +235,18 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         chatId = realChatId;
       }
 
-      // Typing simulation
-      const fullText = response.content;
+      if (title_en || title_ar) {
+        const newTitle = currentLang === 'ar' ? title_ar || title_en : title_en || title_ar;
+        if (newTitle) {
+          setState(prev => ({
+            ...prev,
+            chats: prev.chats.map(chat =>
+              chat.id === chatId ? { ...chat, title: newTitle } : chat
+            ),
+          }));
+        }
+      }
+
       let index = 0;
       const interval = 20;
       const typingInterval = setInterval(() => {
@@ -277,6 +293,29 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     }
   };
 
+  const regenerateConversationTitle = async (chatId: number) => {
+    try {
+      setLoadingTitleId(chatId);
+      const response = await chatService.regenerateTitle(chatId);
+      let languagee = localStorage.getItem('language') || 'en';
+      const key = languagee === 'ar' ? 'title_ar' : 'title_en';
+      const result = response?.[key];
+
+      setState(prev => ({
+        ...prev,
+        chats: prev.chats.map(chat =>
+          chat.id === chatId
+            ? { ...chat, title: result }
+            : chat
+        ),
+      }));
+    } catch (error) {
+      console.error('Error regenerating title:', error);
+    } finally {
+      setLoadingTitleId(null);
+    }
+  };
+
   const selectChat = async (chatId: number) => {
     setState(prev => ({ ...prev, currentChatId: chatId }));
     const chat = state.chats.find(c => c.id === chatId);
@@ -314,8 +353,10 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         exportChat,
         loadConversations,
         loadMoreConversations,
+        regenerateConversationTitle, 
         currentChat,
         hasMoreConversations,
+        loadingTitleId, 
       }}
     >
       {children}

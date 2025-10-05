@@ -10,7 +10,7 @@ import { AIModel } from '../../types/chat.types';
 
 export const ChatInterface: React.FC = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const [selectedModel, setSelectedModel] = useState<AIModel>('gpt4');
+  const [selectedModel, setSelectedModel] = useState<AIModel>('GPT');
   const { currentChat, isLoading } = useChat();
   const { isRTL } = useLanguage();
 

@@ -48,9 +48,9 @@
     "delete": "حذف",
     "export": "تصدير",
     "model": {
-      "gpt4": "نموذج GPT-4",
-      "claude": "نموذج Gemini",
-      "deepseek": "نموذج DeepSeek"
+      "gemini": "نموذج Gemini-2.5-flash",
+      "gpt": "نموذج OPENAI gpt-oss-20b",
+      "deepseek": "نموذج Deepseek-chat-v3.1"
     }
   },
   "profile": {

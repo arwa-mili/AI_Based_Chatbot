@@ -18,6 +18,7 @@ import os
 
 from google import genai
 import openai
+from openai import OpenAI
 
 from core.utils.translate_text import translate_text
 
@@ -32,10 +33,14 @@ def get_ai_client(provider: str):
     if provider == ModelUsedEnum.GEMINI:
         api_key = 'AIzaSyAU6oQbS23u_hXPLAqZIwzOpFlDvRikBEs'
         return genai.Client(api_key=api_key)
-    elif provider == ModelUsedEnum.GPT:
-        api_key = os.getenv("OPENAI_API_KEY")
-        openai.api_key = api_key
-        return openai
+    # view at https://openrouter.ai/deepseek/deepseek-chat-v3.1:free/api
+    #view at https://openrouter.ai/openai/gpt-oss-20b:free
+
+    elif provider == ModelUsedEnum.DEEPSEEK or provider == ModelUsedEnum.GPT:
+        return OpenAI(
+            base_url="https://openrouter.ai/api/v1",
+            api_key="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",
+        )
     else:
         raise ValueError(f"Unknown AI provider: {provider}")
 
@@ -134,15 +139,25 @@ Include previous chat history for context but do not invent information.detect u
                 response = chat.send_message(user_history_text)
                 answer = response.text
 
-            elif provider == ModelUsedEnum.GPT:
-                resp = client.ChatCompletion.create(
-                    model="gpt-4",
+            elif provider == ModelUsedEnum.DEEPSEEK:
+                completion = client.chat.completions.create(
+                    model="deepseek/deepseek-chat-v3.1:free",
                     messages=[
                         {"role": "system", "content": system_instruction},
                         {"role": "user", "content": user_history_text}
                     ]
                 )
-                answer = resp.choices[0].message.content
+                answer = completion.choices[0].message.content
+                
+            elif provider == ModelUsedEnum.GPT:
+                completion = client.chat.completions.create(
+                    model="openai/gpt-oss-20b:free",
+                    messages=[
+                        {"role": "system", "content": system_instruction},
+                        {"role": "user", "content": user_history_text}
+                    ]
+                )
+                answer = completion.choices[0].message.content
 
             else:
                 raise ValueError(f"Provider {provider} is not supported")
@@ -182,7 +197,7 @@ Include previous chat history for context but do not invent information.detect u
             if (not conversation_id):
                 service = ConversationTitleService()  
                 conversation = service.regenerate_conversation_title(
-                conversation_id=conversation_id,
+                conversation_id=conversation.id,
                 user=request.user
             )  
             

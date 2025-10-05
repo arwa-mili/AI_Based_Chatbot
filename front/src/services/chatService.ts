@@ -25,6 +25,12 @@ export const getConversationMessages = async (conversationId: number,req: GetCon
 };
 
 export const sendMessage = async (request: SendMessageRequest) => {
-  const response = await api.post<{ content: string; model: string ,conversation: {id: number}}>('/chat/message', request);
+  const response = await api.post<{ content: string; model: string ,conversation: {id: number,title_en?: string, title_ar?: string}}>('/chat/message', request);
   return response.data;
 };
+
+export const regenerateTitle = async (id: number) => {
+  const response = await api.patch<{ title_en: string; title_ar: string }>(`/chat/conversations/${id}/title`);
+  return response.data;
+};
+

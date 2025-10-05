@@ -2734,3 +2734,17 @@ Traceback (most recent call last):
     return func(*args, **kwds)
            ^^^^^^^^^^^^^^^^^^^
 TypeError: ConversationTitleView.patch() got an unexpected keyword argument 'conversation_id'
+ERROR 2025-10-05 01:18:34,249 log Internal Server Error: /api/chat/conversations/106/messages
+Traceback (most recent call last):
+  File "/home/arwa/Desktop/test-chat-ai/back/venv/lib/python3.12/site-packages/django/core/handlers/exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arwa/Desktop/test-chat-ai/back/venv/lib/python3.12/site-packages/django/utils/deprecation.py", line 122, in __call__
+    response = self.process_response(request, response)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arwa/Desktop/test-chat-ai/back/venv/lib/python3.12/site-packages/django/middleware/common.py", line 108, in process_response
+    return self.response_redirect_class(self.get_full_path_with_slash(request))
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/arwa/Desktop/test-chat-ai/back/venv/lib/python3.12/site-packages/django/middleware/common.py", line 87, in get_full_path_with_slash
+    raise RuntimeError(
+RuntimeError: You called this URL via PATCH, but the URL doesn't end in a slash and you have APPEND_SLASH set. Django can't redirect to the slash URL while maintaining PATCH data. Change your form to point to 127.0.0.1:8000/api/chat/conversations/106/messages/?language_code=en (note the trailing slash), or set APPEND_SLASH=False in your Django settings.

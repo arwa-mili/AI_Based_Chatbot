@@ -1,8 +1,7 @@
 export interface User {
-  id: string;
+  id: number;
   email: string;
   name: string;
-  language: 'en' | 'ar';
   summary?: string;
   createdAt: Date;
 }

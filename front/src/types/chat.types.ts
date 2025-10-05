@@ -11,7 +11,7 @@ export interface Message {
 
 export interface Chat {
   id: number;
-  userId: string;
+  userId: number;
   title: string;
   messages: Message[];
   model: AIModel;
@@ -56,8 +56,8 @@ export interface GetMessagesResponse {
   pageSize: number;
 }
 
-export type AIModel = 'gpt4' | 'claude' | 'deepseek';
-export type AIProvider = 'DeepSeek' | 'Gemini' | 'OpenAi';
+export type AIModel = 'DEEPSEEK' | 'GEMINI' | 'GPT';
+export type AIProvider = 'DeepSeek' | 'Gemini' | 'GPT';
 export interface ChatState {
   chats: Chat[];
   currentChatId: number | null;

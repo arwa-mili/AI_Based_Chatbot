@@ -32,7 +32,7 @@ export const ChatInput: React.FC<ChatInputProps> = ({ selectedModel, disabled })
     await sendMessage({
       conversation_id: currentChat.id,
       text: messageContent,
-      provider: "Gemini",
+      provider: "GPT",
       model: selectedModel,
     });
   };
