@@ -3,6 +3,8 @@ import { Chat, Message, ChatState, AIModel, SendMessageRequest } from '../types/
 import * as chatService from '../services/chatService';
 import { useAuth } from './AuthContext';
 import { useLanguage } from './LanguageContext';
+import jsPDF from "jspdf";
+
 
 interface ChatContextType extends ChatState {
   createNewChat: (model: AIModel) => Promise<void>;
@@ -327,24 +329,49 @@ export const ChatProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     if (chat && chat.messages.length === 0) await loadChatMessages(chatId);
   };
 
-  const exportChat = (chatId: number) => {
-    const chat = state.chats.find(c => c.id === chatId);
-    if (!chat) return;
+  
+const exportChat = (chatId: number) => {
+  const chat = state.chats.find(c => c.id === chatId);
+  if (!chat) return;
 
-    const content = chat.messages
-      .map(msg => `[${msg.role.toUpperCase()}] ${new Date(msg.timestamp).toLocaleString()}\n${msg.content}`)
-      .join('\n\n---\n\n');
+  const doc = new jsPDF();
 
-    const blob = new Blob([content], { type: 'text/plain' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `chat-${chat.id}-${Date.now()}.txt`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  };
+  let y = 10; // vertical position tracker
+  const lineHeight = 8;
+
+  chat.messages.forEach((msg, index) => {
+    const role = `[${msg.role.toUpperCase()}]`;
+    const time = new Date(msg.timestamp).toLocaleString();
+    const header = `${role}  ${time}`;
+    const content = msg.content;
+
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(11);
+    doc.text(header, 10, y);
+    y += lineHeight;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(10);
+    const splitContent = doc.splitTextToSize(content, 180);
+    doc.text(splitContent, 10, y);
+    y += splitContent.length * lineHeight;
+
+    if (index < chat.messages.length - 1) {
+      y += 4;
+      doc.setDrawColor(150);
+      doc.line(10, y, 200, y);
+      y += 6;
+    }
+
+    if (y > 280) {
+      doc.addPage();
+      y = 10;
+    }
+  });
+
+  doc.save(`chat-${chat.id}-${Date.now()}.pdf`);
+};
+
 
   const currentChat = state.chats.find(chat => chat.id === state.currentChatId) || null;
 
